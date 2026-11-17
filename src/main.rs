@@ -9,6 +9,8 @@
 //! Prototype: `dkg` plays every member in one process and the member files
 //! hold their shares unencrypted. Test networks and test amounts only.
 
+mod flow;
+
 use std::error::Error;
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -265,7 +267,12 @@ fn main() {
         Some("info") => cmd_info(&args),
         Some("pop") => cmd_pop(&args),
         Some("send") => cmd_send(&args),
-        _ => Err("usage: tz4-threshold dkg|info|pop|send (see src/main.rs)".into()),
+        Some("member") => flow::member(&args),
+        Some("coord") => flow::coord(&args),
+        _ => Err(
+            "usage: tz4-threshold dkg|info|pop|send|member|coord (see src/main.rs, src/flow.rs)"
+                .into(),
+        ),
     };
     if let Err(e) = result {
         eprintln!("error: {e}");
